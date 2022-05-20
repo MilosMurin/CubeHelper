@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                                                   android:layout_height="wrap_content" android:padding="10dp">
+
+    <TextView
+            android:text="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/solvePosition"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="24sp" android:textStyle="bold"/>
+    <TextView
+            android:text="00:19.218"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/timeListTime"
+            app:layout_constraintStart_toEndOf="@+id/solvePosition"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="50dp"
+            app:layout_constraintBottom_toTopOf="@+id/timeListScramble"
+            android:layout_marginBottom="10dp" android:textStyle="bold" android:textSize="16sp"/>
+    <TextView
+            android:text="D2 F' L2 R2 F U2 F' L2 R' U F' U B D' B' D2 F U' L2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/timeListScramble"
+            app:layout_constraintStart_toEndOf="@+id/solvePosition"
+            android:layout_marginStart="50dp"
+            app:layout_constraintBottom_toBottomOf="parent" android:textSize="12sp"/>
+    <TextView
+            android:text="#57"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/timeListId"
+            app:layout_constraintStart_toEndOf="@+id/timeListTime"
+            app:layout_constraintBottom_toTopOf="@+id/timeListScramble"
+            android:layout_marginStart="10dp" android:layout_marginBottom="10dp" android:textSize="10sp"/>
+    <TextView
+            android:text="2/10/22 23:41"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/timeListDate"
+            app:layout_constraintStart_toEndOf="@+id/timeListId"
+            app:layout_constraintBottom_toTopOf="@+id/timeListScramble"
+            android:layout_marginStart="10dp" android:layout_marginBottom="10dp" android:textSize="10sp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

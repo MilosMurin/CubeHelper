@@ -2,13 +2,11 @@
     <string name="app_name">CubeHelper</string>
     <string name="all_solves">Solves</string>
     <string name="scramble">Scramble: \n%s</string>
-    <string name="timer_default">%1$02d:%2$02d,%3$03d</string>
+    <string name="time_default">%02d:%02d,%03d</string>
     <string name="last_solve">Last solve: %s</string>
     <string name="best_solve">Best solve: %s</string>
     <string name="worst_solve">Worst solve: %s</string>
     <string name="average_of">Average of %d: %s</string>
     <string name="timer_info">Tap and hold,\nthen release to start.</string>
     <string name="algorithm_of_the_day">Your algorithm of the day</string>
-    <string name="aotd_name_temp">T perm</string>
-    <string name="algorithm_temp">R U R\' U\' R\' F R2 U\' R\' U\' R U R\' F\'</string>
 </resources>

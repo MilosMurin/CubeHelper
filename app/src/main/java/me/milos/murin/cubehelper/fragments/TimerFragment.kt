@@ -11,44 +11,43 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import me.milos.murin.cubehelper.R
-import me.milos.murin.cubehelper.Timer
-import me.milos.murin.cubehelper.Timer.Companion.getNullTime
+import me.milos.murin.cubehelper.helpers.ScrambleGenerator
+import me.milos.murin.cubehelper.helpers.Timer
+import me.milos.murin.cubehelper.helpers.Timer.Companion.getNullTime
 import me.milos.murin.cubehelper.databinding.FragmentTimerBinding
 
 class TimerFragment : Fragment() {
 
     private lateinit var timer: Timer
-    private var start: Boolean = false
+    private var ready: Boolean = false
+    private lateinit var binding: FragmentTimerBinding
+    private var solvesAmount = 0
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val binding = DataBindingUtil.inflate<FragmentTimerBinding>(
-            inflater, R.layout.fragment_timer, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_timer, container, false)
 
-        timer = Timer(timer = binding.timer)
+        timer = Timer(fragment = this)
 
 
-        binding.scramble.text = getString(R.string.scramble, generateScramble())
+        binding.scramble.text = generateScramble()
 
-        setTimes(binding)
-
+        setTimes()
 
 
         binding.timerBack.setOnClickListener { view: View ->
             run {
-                timer.stopTimer()
-                binding.timerBack.setBackgroundColor(Color.WHITE)
-                changeVisibility(binding, true)
-                binding.tapAndHold.text = getString(R.string.timer_info)
+               stopTimer()
                 // TODO: Saving times, calculating averages
             }
         }
 
         binding.timerBack.setOnLongClickListener {
-            if (!start) {
-                start = true
+            if (!ready) {
+                ready = true
                 binding.timerBack.setBackgroundColor(Color.YELLOW)
+                binding.timer.text = getNullTime()
             }
             return@setOnLongClickListener true
         }
@@ -56,13 +55,7 @@ class TimerFragment : Fragment() {
         binding.timerBack.setOnTouchListener { view, event ->
             run {
                 if (event.action == MotionEvent.ACTION_UP) {
-                    if (start) {
-                        start = false
-                        binding.timerBack.setBackgroundColor(Color.GREEN)
-                        timer.startTimer()
-                        changeVisibility(binding, false)
-                        binding.tapAndHold.text = getString(R.string.timer_running_info)
-                    }
+                    startTimer()
                 }
                 return@run view?.onTouchEvent(event) ?: true
             }
@@ -71,34 +64,55 @@ class TimerFragment : Fragment() {
         return binding.root
     }
 
+    private fun startTimer() {
+        if (ready) {
+            ready = false
+            binding.timerBack.setBackgroundColor(Color.GREEN)
+            timer.startTimer()
+            changeVisibility(false)
+            binding.tapAndHold.text = getString(R.string.timer_running_info)
+        }
+    }
+
+    private fun stopTimer() {
+        val endTime = timer.stopTimer()
+        if (endTime != null) {
+            binding.timer.text = endTime
+        }
+        binding.timerBack.setBackgroundColor(Color.WHITE)
+        changeVisibility(true)
+        binding.tapAndHold.text = getString(R.string.timer_info)
+        binding.scramble.text = generateScramble()
+        binding.numOfSolves.text = getString(R.string.num_of_solves, ++solvesAmount)
+    }
+
+    fun setTimer(timer: String) {
+        binding.timer.text = timer
+    }
+
+
     private fun generateScramble(): String {
-        // TODO("Generate scrambles")
-        return "TODO: Generate scrambles"
+        return getString(R.string.scramble, ScrambleGenerator.generateScramble())
     }
 
-    private fun changeVisibility(binding: FragmentTimerBinding, to: Boolean) {
+    private fun changeVisibility(to: Boolean) {
+        binding.allSolves.isVisible = to
+        binding.pastTimes.isVisible = to
         binding.scramble.isVisible = to
-        binding.lastSolve.isVisible = to
-        binding.bestSolve.isVisible = to
-        binding.worstSolve.isVisible = to
-        binding.averageOf5.isVisible = to
-        binding.averageOf10.isVisible = to
-        binding.averageOf12.isVisible = to
-        binding.averageOf100.isVisible = to
-        binding.averageOf1000.isVisible = to
     }
 
-    private fun setTimes(binding: FragmentTimerBinding) {
+    private fun setTimes() {
+        // TODO: load saved times
         binding.timer.text = timer.toString()
-        binding.lastSolve.text = getString(R.string.last_solve, getNullTime())
+        binding.numOfSolves.text = getString(R.string.num_of_solves, solvesAmount)
         binding.bestSolve.text = getString(R.string.best_solve, getNullTime())
         binding.worstSolve.text = getString(R.string.worst_solve, getNullTime())
 
         binding.averageOf5.text = averageString(5)
-        binding.averageOf10.text = averageString(10)
         binding.averageOf12.text = averageString(12)
+        binding.averageOf50.text = averageString(50)
         binding.averageOf100.text = averageString(100)
-        binding.averageOf1000.text = averageString(1000)
+        binding.averageOf5Comp.text = getString(R.string.average_of_comp, getNullTime())
     }
 
     private fun averageString(of: Int): String {

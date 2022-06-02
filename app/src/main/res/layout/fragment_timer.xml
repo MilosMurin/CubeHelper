@@ -4,7 +4,12 @@
         xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+                name="timer"
+                type="me.milos.murin.cubehelper.helpers.Timer"/>
+        <variable
+                name="app"
+                type="me.milos.murin.cubehelper.App"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +20,7 @@
             android:id="@+id/timerBack">
 
         <TextView
-                android:text="@string/time_default"
+                android:text="@{timer.Companion.nullTime}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/timer"

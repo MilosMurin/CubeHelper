@@ -10,6 +10,7 @@ class Timer(private var time: Long = 0, private val fragment: TimerFragment) {
 
     private var timerRunning: Boolean = false
     private var handler: Handler = Handler(Looper.getMainLooper())
+    private var endTime: Long = 0
 
     private lateinit var runnable: Runnable
 
@@ -24,6 +25,10 @@ class Timer(private var time: Long = 0, private val fragment: TimerFragment) {
         }
     }
 
+    fun getTime(): Long {
+        return endTime
+    }
+
     fun startTimer() {
         timerRunning = true
         resetTimer()
@@ -34,7 +39,8 @@ class Timer(private var time: Long = 0, private val fragment: TimerFragment) {
         if (timerRunning) {
             timerRunning = false
             handler.removeCallbacks(runnable)
-            return getDiff(System.currentTimeMillis())
+            endTime = System.currentTimeMillis() - time
+            return getTimeString(endTime)
         }
         return null
     }

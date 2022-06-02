@@ -10,18 +10,25 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import me.milos.murin.cubehelper.R
+import me.milos.murin.cubehelper.database.Solve
+import me.milos.murin.cubehelper.database.SolveDatabase
+import me.milos.murin.cubehelper.database.SolveDatabaseDao
 import me.milos.murin.cubehelper.helpers.ScrambleGenerator
 import me.milos.murin.cubehelper.helpers.Timer
 import me.milos.murin.cubehelper.helpers.Timer.Companion.getNullTime
 import me.milos.murin.cubehelper.databinding.FragmentTimerBinding
+import me.milos.murin.cubehelper.helpers.Timer.Companion.getTimeString
 
 class TimerFragment : Fragment() {
 
     private lateinit var timer: Timer
     private var ready: Boolean = false
     private lateinit var binding: FragmentTimerBinding
-    private var solvesAmount = 0
+
+    private lateinit var database: SolveDatabaseDao
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -30,18 +37,16 @@ class TimerFragment : Fragment() {
 
         timer = Timer(fragment = this)
 
+        database = SolveDatabase.getInstance(requireNotNull(this.activity).application).solveDatabaseDao
+
 
         binding.scramble.text = generateScramble()
+        binding.timer.text = getNullTime()
 
-        setTimes()
+        retrieveTimes()
 
 
-        binding.timerBack.setOnClickListener { view: View ->
-            run {
-               stopTimer()
-                // TODO: Saving times, calculating averages
-            }
-        }
+        binding.timerBack.setOnClickListener { view: View -> stopTimer() }
 
         binding.timerBack.setOnLongClickListener {
             if (!ready) {
@@ -75,15 +80,27 @@ class TimerFragment : Fragment() {
     }
 
     private fun stopTimer() {
-        val endTime = timer.stopTimer()
-        if (endTime != null) {
-            binding.timer.text = endTime
-        }
+        val endTime = timer.stopTimer() ?: return
+        binding.timer.text = endTime
         binding.timerBack.setBackgroundColor(Color.WHITE)
         changeVisibility(true)
         binding.tapAndHold.text = getString(R.string.timer_info)
         binding.scramble.text = generateScramble()
-        binding.numOfSolves.text = getString(R.string.num_of_solves, ++solvesAmount)
+        saveTime()
+        retrieveTimes()
+    }
+
+    private fun saveTime() {
+        lifecycleScope.launch {
+            insert()
+        }
+    }
+
+    private suspend fun insert() {
+        val solve = Solve()
+        solve.solveTime = timer.getTime()
+        solve.scramble = binding.scramble.text.toString()
+        database.insert(solve)
     }
 
     fun setTimer(timer: String) {
@@ -101,22 +118,57 @@ class TimerFragment : Fragment() {
         binding.scramble.isVisible = to
     }
 
-    private fun setTimes() {
-        // TODO: load saved times
-        binding.timer.text = timer.toString()
-        binding.numOfSolves.text = getString(R.string.num_of_solves, solvesAmount)
-        binding.bestSolve.text = getString(R.string.best_solve, getNullTime())
-        binding.worstSolve.text = getString(R.string.worst_solve, getNullTime())
+    private fun retrieveTimes() {
 
-        binding.averageOf5.text = averageString(5)
-        binding.averageOf12.text = averageString(12)
-        binding.averageOf50.text = averageString(50)
-        binding.averageOf100.text = averageString(100)
-        binding.averageOf5Comp.text = getString(R.string.average_of_comp, getNullTime())
+        lifecycleScope.launch {
+            binding.numOfSolves.text = getNumOfSolves().toString()
+
+            binding.bestSolve.text = getString(R.string.best_solve, getTimeString(getSolve(true)))
+            binding.worstSolve.text = getString(R.string.worst_solve, getTimeString(getSolve(false)))
+
+            binding.averageOf5.text = averageString(5)
+            binding.averageOf12.text = averageString(12)
+            binding.averageOf50.text = averageString(50)
+            binding.averageOf100.text = averageString(100)
+            binding.averageOf5Comp.text = averageString(3)
+        }
     }
 
-    private fun averageString(of: Int): String {
-        return getString(R.string.average_of, of, getNullTime())
+    private suspend fun getNumOfSolves(): Long {
+        return database.getNumOfSolves() ?: 0
+    }
+
+    private suspend fun getSolve(best: Boolean): Long {
+        val solve: Long = if (best) {
+            database.getBestSolve()
+        } else {
+            database.getWorstSolve()
+        } ?: return 0
+        return solve
+    }
+
+    private suspend fun getAverage(of: Int): Long {
+        var avg: Long = if (of == 3) {
+            database.getCompAverage().subList(1, 4).sum()
+        } else {
+            database.getAverageOf(of).sum()
+        }
+        avg /= of
+        return avg
+    }
+
+    private suspend fun averageString(of: Int): String {
+        val nos = getNumOfSolves()
+        if (of == 3) {
+            if (nos >= 5) {
+                return getString(R.string.average_of_comp, getTimeString(getAverage(of)))
+            }
+        }
+        return if (nos >= of) {
+            getString(R.string.average_of, of, getTimeString(getAverage(of)))
+        } else {
+            getString(R.string.average_of, of, getNullTime())
+        }
     }
 
 }

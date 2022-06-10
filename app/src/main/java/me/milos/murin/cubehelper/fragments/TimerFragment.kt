@@ -112,6 +112,9 @@ class TimerFragment : Fragment() {
         return getString(R.string.scramble, ScrambleGenerator.generateScramble())
     }
 
+
+    // USed for database acces
+
     private fun changeVisibility(to: Boolean) {
         binding.allSolves.isVisible = to
         binding.pastTimes.isVisible = to

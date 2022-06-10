@@ -21,13 +21,17 @@ class TwoImageFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentTwoImageBinding>(
             inflater, R.layout.fragment_two_image, container, false)
 
-        if (args.page == 2) {
+        if (args.page == 2) { // TODO: add text
 
             binding.imageNoOne.setImageResource(R.drawable.calendar)
             binding.imageNoTwo.setImageResource(R.drawable.cube)
 
             binding.imageNoTwo.setOnClickListener { view: View ->
                 view.findNavController().navigate(R.id.action_twoImage_to_learnTwoImage)
+            }
+
+            binding.imageNoOne.setOnClickListener { view: View ->
+                view.findNavController().navigate(R.id.action_learnTwoImage_to_algOfTheDay)
             }
 
         } else {

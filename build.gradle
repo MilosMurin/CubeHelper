@@ -6,7 +6,7 @@ buildscript {
         gradleVersion = '7.0.0'
         navigationVersion = '2.4.2'
         room_version = '2.4.2'
-        coroutine_version = '1.6.1'
+        coroutine_version = '1.6.2'
     }
 
     repositories {

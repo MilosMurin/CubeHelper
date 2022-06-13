@@ -23,9 +23,8 @@ class App : Application() {
     // Alg of the day midnight reset
     // Past solves list fragment
     // Alg of the day saving
-    // 1st list learner cube methods
-    // 2nd list learner cube method steps
-    // explanation fragment
-    // colors
+    // Add algs for f2l and beyond cfop
+    // Timer for different things (3x3, 2x2, 4x4, algs) (save in the same database but with an id for the type 1-3x3, 2-2x2...)
+    // themes
 }
 

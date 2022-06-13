@@ -6,7 +6,12 @@ import me.milos.murin.cubehelper.R
 import me.milos.murin.cubehelper.data.Algorithms
 import me.milos.murin.cubehelper.helpers.CubeDrawable
 
-class AOTDViewModel: ViewModel() {
+class AOTDViewModel : ViewModel() {
+
+    // for saving
+    private lateinit var type: String
+
+    private var id: Int = 1
 
     private lateinit var alg: Algorithms.Algorithm
 
@@ -27,14 +32,14 @@ class AOTDViewModel: ViewModel() {
         get() = _cubeDrawable
 
     init {
-        setRandomAlg() // TODO: Only reset on/after midnight
+        setRandomAlg()
     }
 
-
-    private fun setRandomAlg() {
-        val aotdType = listOf("pll", "oll").random()
-        setAlgorithm(aotdType, if (aotdType == "pll") Algorithms.getRandomPll()
-                                else Algorithms.getRandomOll())
+    fun setRandomAlg() {
+        type = listOf("pll", "oll").random()
+        id = if (type == "pll") Algorithms.getRandomPll()
+        else Algorithms.getRandomOll()
+        setAlgorithm(type, id)
     }
 
 

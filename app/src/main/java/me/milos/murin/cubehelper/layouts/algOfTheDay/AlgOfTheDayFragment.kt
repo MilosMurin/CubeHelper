@@ -24,13 +24,6 @@ class AlgOfTheDayFragment : Fragment() {
 
         draw(binding)
 
-//        binding.cubeOrientation.setOnClickListener {
-//            run {
-//                update()
-//                draw(binding)
-//            }
-//        }
-
         return binding.root
     }
 
@@ -42,9 +35,5 @@ class AlgOfTheDayFragment : Fragment() {
         binding.cubeOrientation.rotation = viewModel.rotation
 
         binding.cubeOrientation.setImageDrawable(viewModel.cubeDrawable)
-
-
-        // TODO: fix micro movements of cubeOrientation might be because of rotations (when not quickly switching
-        //  pictures it is not noticeable) maybe does not need a fix :D
     }
 }

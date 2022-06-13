@@ -7,7 +7,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".fragments.TwoImageFragment">
+            tools:context=".layouts.twoImage.TwoImageFragment">
+
         <ImageView
                 android:src="@drawable/stopwatch"
                 android:layout_width="0dp"
@@ -18,12 +19,14 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="20dp"
-                android:padding="40dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/imageNoTwo"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                android:paddingTop="60dp"
+                android:paddingBottom="20dp"/>
+
         <ImageView
                 android:src="@drawable/book"
                 android:layout_width="0dp"
@@ -39,5 +42,38 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageNoOne"/>
+
+        <TextView
+                android:text="@string/timer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageOneText"
+                android:textSize="24sp"
+                app:layout_constraintTop_toTopOf="@+id/imageNoOne"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/imageNoOne"
+                app:layout_constraintStart_toStartOf="@+id/imageNoOne"
+                app:layout_constraintHorizontal_bias="0.491"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:textAlignment="center"/>
+
+        <TextView
+                android:text="@string/learn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageTwoText"
+                android:textSize="24sp"
+                app:layout_constraintTop_toTopOf="@+id/imageNoTwo"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/imageNoTwo"
+                app:layout_constraintStart_toStartOf="@+id/imageNoTwo"
+                app:layout_constraintHorizontal_bias="0.491"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:textAlignment="center"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

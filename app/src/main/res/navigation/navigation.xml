@@ -3,7 +3,7 @@
             xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/navigation" app:startDestination="@id/twoImageFragment">
 
-    <fragment android:id="@+id/twoImageFragment" android:name="me.milos.murin.cubehelper.fragments.TwoImageFragment"
+    <fragment android:id="@+id/twoImageFragment" android:name="me.milos.murin.cubehelper.layouts.twoImage.TwoImageFragment"
               android:label="TwoImageFragment" tools:layout="@layout/fragment_two_image">
         <argument android:name="page" app:argType="integer" android:defaultValue="1"/>
         <action android:id="@+id/action_mainTwoImage_to_timer" app:destination="@id/timerFragment"/>
@@ -13,9 +13,9 @@
         <action android:id="@+id/action_learnTwoImage_to_algOfTheDay"
                 app:destination="@id/algOfTheDayFragment"/>
     </fragment>
-    <fragment android:id="@+id/timerFragment" android:name="me.milos.murin.cubehelper.fragments.TimerFragment"
+    <fragment android:id="@+id/timerFragment" android:name="me.milos.murin.cubehelper.layouts.timer.TimerFragment"
               android:label="TimerFragment" tools:layout="@layout/fragment_timer"/>
     <fragment android:id="@+id/algOfTheDayFragment"
-              android:name="me.milos.murin.cubehelper.fragments.AlgOfTheDayFragment"
+              android:name="me.milos.murin.cubehelper.layouts.algOfTheDay.AlgOfTheDayFragment"
               android:label="AlgOfTheDayFragment" tools:layout="@layout/fragment_alg_of_the_day"/>
 </navigation>

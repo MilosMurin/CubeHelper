@@ -7,15 +7,12 @@
         <variable
                 name="timer"
                 type="me.milos.murin.cubehelper.helpers.Timer"/>
-        <variable
-                name="app"
-                type="me.milos.murin.cubehelper.App"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".fragments.TimerFragment"
+            tools:context=".layouts.timer.TimerFragment"
             android:textAlignment="center"
             android:id="@+id/timerBack">
 

@@ -17,5 +17,15 @@ class App : Application() {
         super.onCreate()
         instance = this
     }
+
+    // TODO list
+    // Alg of the day selection
+    // Alg of the day midnight reset
+    // Past solves list fragment
+    // Alg of the day saving
+    // 1st list learner cube methods
+    // 2nd list learner cube method steps
+    // explanation fragment
+    // colors
 }
 

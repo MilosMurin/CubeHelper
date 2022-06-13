@@ -11,4 +11,10 @@
     <string name="timer_info">Tap and hold,\nthen release to start</string>
     <string name="timer_running_info">Tap to stop</string>
     <string name="algorithm_of_the_day">Your algorithm of the day</string>
+    <string name="timer">Timer</string>
+    <string name="learn">Learn</string>
+    <string name="daily">Daily</string>
+    <string name="tbt">3x3</string>
+    <string name="permutationShort">%s perm</string>
+    <string name="oll">%s oll</string>
 </resources>

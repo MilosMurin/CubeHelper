@@ -2,12 +2,13 @@ package me.milos.murin.cubehelper.helpers
 
 import android.os.Handler
 import android.os.Looper
+import android.widget.TextView
 import me.milos.murin.cubehelper.App
 import me.milos.murin.cubehelper.R
-import me.milos.murin.cubehelper.fragments.TimerFragment
 
-class Timer(private var time: Long = 0, private val fragment: TimerFragment) {
+class Timer(private val timerView: TextView) {
 
+    private var time: Long = 0
     private var timerRunning: Boolean = false
     private var handler: Handler = Handler(Looper.getMainLooper())
     private var endTime: Long = 0
@@ -18,7 +19,7 @@ class Timer(private var time: Long = 0, private val fragment: TimerFragment) {
         runnable = Runnable {
             if (timerRunning) {
 
-                fragment.setTimer(getDiff(System.currentTimeMillis()))
+                timerView.text = getDiff(System.currentTimeMillis())
 
                 handler.postDelayed(runnable, 1)
             }

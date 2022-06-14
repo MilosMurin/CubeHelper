@@ -47,6 +47,7 @@ class AlgOfTheDayFragment : Fragment() {
     }
 
     private fun draw(binding: FragmentAlgOfTheDayBinding) {
+        viewModel.updateAlgorithm()
 
         binding.aotdName.text = viewModel.algName
 

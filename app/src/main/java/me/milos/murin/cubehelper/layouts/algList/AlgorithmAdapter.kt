@@ -36,7 +36,7 @@ class AlgorithmAdapter(private val data: List<Algorithms.Algorithm>):
         val id = Algorithms.getId(position)
 
         holder.algName.text = Algorithms.algListName(type, id)
-        holder.algAlg.text = alg.alg
+        holder.algAlg.text = Algorithms.getEdited() ?: alg.alg
         holder.cube.setImageDrawable(CubeDrawable(alg.layer))
 
         if (Algorithms.isInSelection(type, id)) {
@@ -49,6 +49,11 @@ class AlgorithmAdapter(private val data: List<Algorithms.Algorithm>):
             select(holder.back, type, id)
         }
 
+        holder.algAlg.setOnFocusChangeListener { _: View, _: Boolean ->
+            if (!holder.algAlg.hasFocus()) {
+                Algorithms.edit(position, holder.algAlg.text.toString())
+            }
+        }
     }
 
     private fun select(layout: ConstraintLayout, type: String, id: Int) {

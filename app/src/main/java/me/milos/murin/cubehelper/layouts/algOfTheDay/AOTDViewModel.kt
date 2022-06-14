@@ -6,11 +6,6 @@ import me.milos.murin.cubehelper.helpers.CubeDrawable
 
 class AOTDViewModel : ViewModel() {
 
-    // for saving
-    private lateinit var type: String
-
-    private var id: Int = 1
-
     private lateinit var alg: Algorithms.Algorithm
 
     private lateinit var _algText: String
@@ -36,28 +31,29 @@ class AOTDViewModel : ViewModel() {
     private fun setRandomAlg() {
         Algorithms.selectRandomAlg()
 
-        type = Algorithms.getType()
-        id = Algorithms.getId()
-        setAlgorithm(type, id)
+        updateAlgorithm()
     }
 
 
-    private fun setAlgorithm(type: String, id: Int) {
-        alg = Algorithms.getAlg(type, id)!!
 
-        _algName = Algorithms.algName(type, id)
+    fun updateAlgorithm() {
+        alg = Algorithms.getAlg()!!
 
-        if (alg.alg.startsWith("y")) {
-            _rotation = when (alg.alg[1]) {
+        _algName = Algorithms.algName()
+
+        val realAlg = Algorithms.getEdited() ?: alg.alg
+
+        if (realAlg.startsWith("y")) {
+            _rotation = when (realAlg[1]) {
                 '\'' -> -1
                 '2' -> 2
                 else -> 1
             }
-            _algText = alg.alg.substring(alg.alg.indexOf(" "))
+            _algText = realAlg.substring(realAlg.indexOf(" "))
 
         } else {
             _rotation = 0
-            _algText = alg.alg
+            _algText = realAlg
         }
         _cubeDrawable = CubeDrawable(alg.layer)
     }

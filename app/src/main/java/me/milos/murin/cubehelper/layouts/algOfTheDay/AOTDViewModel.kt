@@ -33,52 +33,13 @@ class AOTDViewModel : ViewModel() {
 
     init {
         setRandomAlg()
-//        For testing
-//        type = "wv"
-//        id = 1
-//        setAlgorithm(type, id)
     }
 
-//    For testing
-//    fun nextAlg() {
-//        if (type == "pll") {
-//            if (id >= 21) {
-//                type = "oll"
-//                id = 0
-//            } else {
-//                id++
-//            }
-//        }
-//        if (type == "oll") {
-//            if (id >= 57) {
-//                type = "coll"
-//                id = 0
-//            } else {
-//                id++
-//            }
-//        }
-//        if (type == "coll") {
-//            if (id >= 28) {
-//                type = "wv"
-//                id = 0
-//            } else {
-//                id++
-//            }
-//        }
-//        if (type == "wv") {
-//            if (id >= 27) {
-//                type = "pll"
-//                id = 1
-//            } else {
-//                id++
-//            }
-//        }
-//        setAlgorithm(type, id)
-//    }
+    private fun setRandomAlg() {
+        Algorithms.selectRandomAlg()
 
-    fun setRandomAlg() {
-        type = Algorithms.getRandomType()
-        id = Algorithms.getRandomId(type)
+        type = Algorithms.getType()
+        id = Algorithms.getId()
         setAlgorithm(type, id)
     }
 

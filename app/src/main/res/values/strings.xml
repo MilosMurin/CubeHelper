@@ -18,5 +18,10 @@
     <string name="permutationShort">%s perm</string>
     <string name="oll">%d oll</string>
     <string name="coll">%s coll</string>
-    <string name="wv">%s winter variation</string>
+    <string name="winter_variation">%s winter variation</string>
+    <string name="pll">%s pll</string>
+    <string name="wv">%s wv</string>
+    <string name="alg_selection">Algorithm selection</string>
+    <string name="cube">cube</string>
+    <string name="algorithm">Algorithm</string>
 </resources>

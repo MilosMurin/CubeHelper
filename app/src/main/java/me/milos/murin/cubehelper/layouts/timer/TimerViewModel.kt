@@ -81,8 +81,10 @@ class TimerViewModel(private val database: SolveDatabaseDao, application: Applic
     suspend fun averageString(of: Int): String {
         val nos = getNumOfSolves()
         if (of == 3) {
-            if (nos >= 5) {
-                return App.get(R.string.average_of_comp, Timer.getTimeString(getAverage(of)))
+            return if (nos >= 5) {
+                App.get(R.string.average_of_comp, Timer.getTimeString(getAverage(of)))
+            } else {
+                App.get(R.string.average_of_comp, Timer.getNullTime())
             }
         }
         return if (nos >= of) {

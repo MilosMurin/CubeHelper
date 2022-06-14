@@ -1,10 +1,16 @@
 package me.milos.murin.cubehelper.data
 
+import android.os.Bundle
 import me.milos.murin.cubehelper.App
 import me.milos.murin.cubehelper.R
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.random.Random
+
+const val SELECTED_KEY = "selected"
+const val TIME_KEY = "next-selection"
+const val SELECTION_KEY = "selection"
 
 class Algorithms {
 
@@ -15,11 +21,24 @@ class Algorithms {
 
         private val defaultSelection = 1..77
 
-        private val selection: MutableList<Int> = defaultSelection.toMutableList()
+        private var selection: ArrayList<Int> = ArrayList(defaultSelection.toList())
 
         private var selected: Int = selection.random(Random.Default)
 
         private var nextSelection: Calendar = calculateNextSelection()
+
+        fun save(bundle: Bundle) {
+            bundle.putInt(SELECTED_KEY, selected)
+            bundle.putLong(TIME_KEY, nextSelection.timeInMillis)
+            bundle.putIntegerArrayList(SELECTION_KEY, selection)
+        }
+
+        fun load(bundle: Bundle) {
+            selected = bundle.getInt(SELECTED_KEY)
+            nextSelection = Calendar.getInstance()
+            nextSelection.timeInMillis = bundle.getLong(TIME_KEY)
+            selection = bundle.getIntegerArrayList(SELECTION_KEY) as ArrayList<Int>
+        }
 
         private fun calculateNextSelection(): Calendar {
             val c: Calendar = Calendar.getInstance()
@@ -80,7 +99,7 @@ class Algorithms {
             }
         }
 
-        fun getId(type: String, id: Int): Int {
+        private fun getId(type: String, id: Int): Int {
             return when (type) {
                 "oll" -> id + 20
                 "coll" -> id + 77

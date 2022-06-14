@@ -5,16 +5,16 @@
 
     <fragment android:id="@+id/twoImageFragment" android:name="me.milos.murin.cubehelper.layouts.twoImage.TwoImageFragment"
               android:label="TwoImageFragment" tools:layout="@layout/fragment_two_image">
-        <argument android:name="page" app:argType="integer" android:defaultValue="1"/>
         <action android:id="@+id/action_mainTwoImage_to_timer" app:destination="@id/timerFragment"/>
-        <action android:id="@+id/action_twoImage_to_learnTwoImage" app:destination="@id/twoImageFragment">
-            <argument android:name="page" app:argType="integer" android:defaultValue="2"/>
-        </action>
         <action android:id="@+id/action_learnTwoImage_to_algOfTheDay"
                 app:destination="@id/algOfTheDayFragment"/>
     </fragment>
     <fragment android:id="@+id/timerFragment" android:name="me.milos.murin.cubehelper.layouts.timer.TimerFragment"
-              android:label="TimerFragment" tools:layout="@layout/fragment_timer"/>
+              android:label="TimerFragment" tools:layout="@layout/fragment_timer">
+        <action
+                android:id="@+id/action_timerFragment_to_timerListFragment"
+                app:destination="@id/timerListFragment"/>
+    </fragment>
     <fragment android:id="@+id/algOfTheDayFragment"
               android:name="me.milos.murin.cubehelper.layouts.algOfTheDay.AlgOfTheDayFragment"
               android:label="AlgOfTheDayFragment" tools:layout="@layout/fragment_alg_of_the_day">
@@ -24,6 +24,11 @@
     </fragment>
     <fragment
             android:id="@+id/algListFragment"
-            android:name="me.milos.murin.cubehelper.layouts.algs.AlgListFragment"
+            android:name="me.milos.murin.cubehelper.layouts.algList.AlgListFragment"
             android:label="AlgListFragment"  tools:layout="@layout/alg_list_fragment"/>
+    <fragment
+            android:id="@+id/timerListFragment"
+            android:name="me.milos.murin.cubehelper.layouts.timerList.TimerListFragment"
+            android:label="fragment_timer_list"
+            tools:layout="@layout/fragment_timer_list"/>
 </navigation>

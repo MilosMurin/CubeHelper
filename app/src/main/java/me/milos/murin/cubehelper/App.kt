@@ -20,9 +20,7 @@ class App : Application() {
 
     // TODO list
     // Alg of the day saving after shutdown
-    // Two image fragment remove mid step
     // Alg of the day editing
-    // Past solves list fragment
     // Timer for different things (3x3, 2x2, 4x4, algs) (save in the same database but with an id for the type 1-3x3, 2-2x2...)
     // themes
 }

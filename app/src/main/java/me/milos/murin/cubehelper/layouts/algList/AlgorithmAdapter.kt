@@ -1,4 +1,4 @@
-package me.milos.murin.cubehelper.layouts.algs
+package me.milos.murin.cubehelper.layouts.algList
 
 import android.graphics.Color
 import android.view.LayoutInflater

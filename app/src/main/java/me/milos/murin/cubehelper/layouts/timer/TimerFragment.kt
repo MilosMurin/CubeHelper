@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import kotlinx.coroutines.launch
 import me.milos.murin.cubehelper.R
 import me.milos.murin.cubehelper.database.SolveDatabase
@@ -60,6 +61,10 @@ class TimerFragment : Fragment() {
                 }
                 return@run view?.onTouchEvent(event) ?: true
             }
+        }
+
+        binding.allSolves.setOnClickListener {
+            view?.findNavController()?.navigate(R.id.action_timerFragment_to_timerListFragment)
         }
 
         return binding.root

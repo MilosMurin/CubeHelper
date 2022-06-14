@@ -24,6 +24,12 @@ class AlgOfTheDayFragment : Fragment() {
 
         draw(binding)
 
+//        For testing
+//        binding.cubeOrientation.setOnClickListener {
+//            viewModel.nextAlg()
+//            draw(binding)
+//        }
+
         return binding.root
     }
 

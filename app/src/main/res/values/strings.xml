@@ -16,5 +16,7 @@
     <string name="daily">Daily</string>
     <string name="tbt">3x3</string>
     <string name="permutationShort">%s perm</string>
-    <string name="oll">%s oll</string>
+    <string name="oll">%d oll</string>
+    <string name="coll">%s coll</string>
+    <string name="wv">%s winter variation</string>
 </resources>

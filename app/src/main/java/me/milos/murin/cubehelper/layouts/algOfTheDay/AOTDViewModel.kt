@@ -33,22 +33,60 @@ class AOTDViewModel : ViewModel() {
 
     init {
         setRandomAlg()
+//        For testing
+//        type = "wv"
+//        id = 1
+//        setAlgorithm(type, id)
     }
 
+//    For testing
+//    fun nextAlg() {
+//        if (type == "pll") {
+//            if (id >= 21) {
+//                type = "oll"
+//                id = 0
+//            } else {
+//                id++
+//            }
+//        }
+//        if (type == "oll") {
+//            if (id >= 57) {
+//                type = "coll"
+//                id = 0
+//            } else {
+//                id++
+//            }
+//        }
+//        if (type == "coll") {
+//            if (id >= 28) {
+//                type = "wv"
+//                id = 0
+//            } else {
+//                id++
+//            }
+//        }
+//        if (type == "wv") {
+//            if (id >= 27) {
+//                type = "pll"
+//                id = 1
+//            } else {
+//                id++
+//            }
+//        }
+//        setAlgorithm(type, id)
+//    }
+
     fun setRandomAlg() {
-        type = listOf("pll", "oll").random()
-        id = if (type == "pll") Algorithms.getRandomPll()
-        else Algorithms.getRandomOll()
+        type = Algorithms.getRandomType()
+        id = Algorithms.getRandomId(type)
         setAlgorithm(type, id)
     }
 
 
     private fun setAlgorithm(type: String, id: Int) {
-        alg = if (type == "pll") Algorithms.getPll(id)!!
-            else Algorithms.getOll(id)!!
+        alg = Algorithms.getAlg(type, id)!!
 
-        _algName = if (type == "pll") App.get(R.string.permutationShort, alg.type)
-            else App.get(R.string.oll, id)
+        _algName = Algorithms.algName(type, id)
 
         if (alg.alg.startsWith("y")) {
             _rotation = when (alg.alg[1]) {

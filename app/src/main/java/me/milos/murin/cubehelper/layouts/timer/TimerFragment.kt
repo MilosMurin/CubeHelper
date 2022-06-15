@@ -109,7 +109,9 @@ class TimerFragment : Fragment() {
     private fun retrieveTimes() {
 
         lifecycleScope.launch {
-            binding.numOfSolves.text = viewModel.getNumOfSolves().toString()
+            val nos = viewModel.getNumOfSolves()
+            binding.numOfSolves.text = nos.toString()
+            binding.allSolves.isVisible = nos > 0
 
             binding.bestSolve.text = getString(R.string.best_solve, getTimeString(viewModel.getSolve(true)))
             binding.worstSolve.text = getString(R.string.worst_solve, getTimeString(viewModel.getSolve(false)))

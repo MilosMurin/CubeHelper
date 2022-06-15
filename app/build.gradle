@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "me.milos.murin.cubehelper"
-        minSdk 23
+        minSdk 24
         targetSdk 31
         versionCode 1
         versionName "1.0"
@@ -65,4 +65,5 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
+    implementation("com.google.guava:guava:31.1-android")
 }

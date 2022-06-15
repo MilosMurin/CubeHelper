@@ -18,8 +18,9 @@ class App : Application() {
         instance = this
     }
 
+
+
     // TODO list
-    // Alg of the day saving after shutdown
     // Timer for different things (3x3, 2x2, 4x4, algs) (save in the same database but with an id for the type 1-3x3, 2-2x2...)
     // themes
 }

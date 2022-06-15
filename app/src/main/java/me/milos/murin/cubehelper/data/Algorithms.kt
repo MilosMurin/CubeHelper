@@ -1,17 +1,10 @@
 package me.milos.murin.cubehelper.data
 
-import android.os.Bundle
 import me.milos.murin.cubehelper.App
 import me.milos.murin.cubehelper.R
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 import kotlin.random.Random
 
-const val SELECTED_KEY = "selected"
-const val TIME_KEY = "next-selection"
-const val SELECTION_KEY = "selection"
-const val EDITED_KEY = "edited"
 
 class Algorithms {
 
@@ -30,23 +23,53 @@ class Algorithms {
 
         private var edited: HashMap<Int, String> = hashMapOf()
 
-        fun save(bundle: Bundle) {
-            bundle.putInt(SELECTED_KEY, selected)
-            bundle.putLong(TIME_KEY, nextSelection.timeInMillis)
-            bundle.putIntegerArrayList(SELECTION_KEY, selection)
-            bundle.putSerializable(EDITED_KEY, edited)
+        fun serialize(): String {
+            val sb = java.lang.StringBuilder()
+            sb.append(selected).append("|")
+            sb.append(nextSelection.timeInMillis).append("|")
+
+            for (i in selection) {
+                sb.append(i).append(",")
+            }
+            sb.append("|")
+            for (i in edited.keys) {
+                val v = edited[i]
+                if (v != null) {
+                    sb.append(i).append(":").append(v).append(",")
+                }
+            }
+            return sb.toString()
         }
 
-        fun load(bundle: Bundle) {
-            selected = bundle.getInt(SELECTED_KEY)
-            nextSelection = Calendar.getInstance()
-            nextSelection.timeInMillis = bundle.getLong(TIME_KEY)
-            selection = bundle.getIntegerArrayList(SELECTION_KEY) as ArrayList<Int>
-            val ser = bundle.getSerializable(EDITED_KEY)
-            if (ser is HashMap<*, *>) {
-                edited = ser as HashMap<Int, String>
+        fun deserialize(s: String) {
+            for ((j, l) in s.split("|").withIndex()) {
+                when (j) {
+                    0 -> selected = l.toInt()
+                    1 -> {
+                        nextSelection = Calendar.getInstance()
+                        nextSelection.timeInMillis = l.toLong()
+                    }
+                    2 -> {
+                        if (l != "") {
+                            selection.clear()
+                            for (k in l.split(",")) {
+                                if (k != "")
+                                    selection.add(k.toInt())
+                            }
+                        }
+                    }
+                    3 -> {
+                        if (l != "") {
+                            for (k in l.split(",")) {
+                                if (k != "") {
+                                    val g = k.split(":")
+                                    edited[g[0].toInt()] = g[1]
+                                }
+                            }
+                        }
+                    }
+                }
             }
-
         }
 
         fun edit(id: Int, alg: String) {

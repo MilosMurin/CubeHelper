@@ -1,6 +1,6 @@
 package me.milos.murin.cubehelper.layouts.algList
 
-import android.graphics.Color
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +15,9 @@ import me.milos.murin.cubehelper.helpers.CubeDrawable
 class AlgorithmAdapter(private val data: List<Algorithms.Algorithm>):
     RecyclerView.Adapter<AlgorithmAdapter.ViewHolder>() {
 
+    private var background: Int = 0
+    private var green: Int = 0
+
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val algName: TextView = view.findViewById(R.id.algListName)
         val algAlg: TextView = view.findViewById(R.id.algListAlg)
@@ -25,6 +28,11 @@ class AlgorithmAdapter(private val data: List<Algorithms.Algorithm>):
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.alg_list_item, viewGroup, false)
+        val td = TypedValue()
+        view.context.theme.resolveAttribute(android.R.attr.windowBackground, td, true)
+        background = td.data
+        view.context.theme.resolveAttribute(R.attr.green, td, false)
+        green = td.data
 
         return ViewHolder(view)
     }
@@ -40,9 +48,9 @@ class AlgorithmAdapter(private val data: List<Algorithms.Algorithm>):
         holder.cube.setImageDrawable(CubeDrawable(alg.layer))
 
         if (Algorithms.isInSelection(type, id)) {
-            holder.back.setBackgroundColor(Color.GREEN)
+            holder.back.setBackgroundResource(green)
         } else {
-            holder.back.setBackgroundColor(Color.WHITE)
+            holder.back.setBackgroundColor(background)
         }
 
         holder.back.setOnClickListener {
@@ -58,9 +66,9 @@ class AlgorithmAdapter(private val data: List<Algorithms.Algorithm>):
 
     private fun select(layout: ConstraintLayout, type: String, id: Int) {
         if (Algorithms.select(type, id)) {
-            layout.setBackgroundColor(Color.GREEN)
+            layout.setBackgroundResource(green)
         } else {
-            layout.setBackgroundColor(Color.WHITE)
+            layout.setBackgroundColor(background)
         }
     }
 

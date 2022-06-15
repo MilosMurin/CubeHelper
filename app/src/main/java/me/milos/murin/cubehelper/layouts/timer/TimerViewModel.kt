@@ -43,8 +43,8 @@ class TimerViewModel(private val database: SolveDatabaseDao, application: Applic
     }
 
     fun generateScramble(): String {
-        scramble = App.get(R.string.scramble, ScrambleGenerator.generateScramble())
-        return scramble
+        scramble = ScrambleGenerator.generateScramble()
+        return App.get(R.string.scramble,scramble)
     }
 
     private suspend fun insert() {

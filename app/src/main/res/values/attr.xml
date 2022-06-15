@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="yellow" format="reference"/>
+    <attr name="green" format="reference"/>
+    <attr name="tintDrawable" format="reference"/>
+    <attr name="linePaint" format="reference"/>
+
+
+</resources>

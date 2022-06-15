@@ -1,6 +1,8 @@
 package me.milos.murin.cubehelper.data
 
 import android.graphics.Paint
+import me.milos.murin.cubehelper.App
+import me.milos.murin.cubehelper.R
 
 class LastLayer(initList: List<Int>) {
 
@@ -44,7 +46,7 @@ class LastLayer(initList: List<Int>) {
 
 
     companion object {
-        private val defaultPaint: Paint = Paint().apply { setARGB(255, 43, 42, 42) } // 0
+        private val defaultPaint: Paint = App.getPaint(R.color.cubeDefault)
         private val red: Paint = Paint().apply { setARGB(255, 255, 0, 0) } // 1
         private val orange: Paint = Paint().apply { setARGB(255, 255, 165, 0) } // 2
         private val white: Paint = Paint().apply { setARGB(255, 255, 255, 255) } // 3

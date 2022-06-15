@@ -25,7 +25,9 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:paddingTop="60dp"
-                android:paddingBottom="20dp"/>
+                android:paddingBottom="20dp"
+                android:tint="?tintDrawable"
+                android:contentDescription="@string/stopwatch"/>
 
         <ImageView
                 android:src="@drawable/book"
@@ -41,7 +43,9 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageNoOne"/>
+                app:layout_constraintTop_toBottomOf="@+id/imageNoOne"
+                android:tint="?tintDrawable"
+                android:contentDescription="@string/book"/>
 
         <TextView
                 android:text="@string/timer"

@@ -1,7 +1,10 @@
 package me.milos.murin.cubehelper
 
 import android.app.Application
+import android.graphics.Paint
+import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 
 
 class App : Application() {
@@ -11,17 +14,17 @@ class App : Application() {
         fun get(@StringRes stringRes: Int, vararg formatArgs: Any = emptyArray()): String {
             return instance.getString(stringRes, *formatArgs)
         }
+
+        fun getPaint(@ColorRes colorRes: Int): Paint {
+            val paint = Paint()
+            paint.color = ContextCompat.getColor(instance, colorRes)
+            return paint
+        }
     }
 
     override fun onCreate() {
         super.onCreate()
         instance = this
     }
-
-
-
-    // TODO list
-    // Timer for different things (3x3, 2x2, 4x4, algs) (save in the same database but with an id for the type 1-3x3, 2-2x2...)
-    // themes
 }
 

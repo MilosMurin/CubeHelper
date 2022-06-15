@@ -24,4 +24,6 @@
     <string name="alg_selection">Algorithm selection</string>
     <string name="cube">cube</string>
     <string name="algorithm">Algorithm</string>
+    <string name="stopwatch">Stopwatch</string>
+    <string name="book">Book</string>
 </resources>

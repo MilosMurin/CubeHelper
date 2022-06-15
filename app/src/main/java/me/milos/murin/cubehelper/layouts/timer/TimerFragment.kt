@@ -1,8 +1,8 @@
 package me.milos.murin.cubehelper.layouts.timer
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -20,16 +20,30 @@ import me.milos.murin.cubehelper.databinding.FragmentTimerBinding
 import me.milos.murin.cubehelper.helpers.Timer.Companion.getNullTime
 import me.milos.murin.cubehelper.helpers.Timer.Companion.getTimeString
 
+
 class TimerFragment : Fragment() {
 
     private lateinit var viewModel: TimerViewModel
 
     private lateinit var binding: FragmentTimerBinding
 
+    private var default: Int = 0
+    private var green: Int = 0
+    private var yellow: Int = 0
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_timer, container, false)
+
+        val td = TypedValue()
+        binding.root.context.theme.resolveAttribute(android.R.attr.windowBackground, td, true)
+        default = td.data
+        binding.root.context.theme.resolveAttribute(R.attr.green, td, false)
+        green = td.data
+        binding.root.context.theme.resolveAttribute(R.attr.yellow, td, false)
+        yellow = td.data
+
 
         val application = requireNotNull(this.activity).application
 
@@ -73,14 +87,14 @@ class TimerFragment : Fragment() {
     private fun readyTimer() {
         if (!viewModel.ready) {
             viewModel.ready = true
-            binding.timerBack.setBackgroundColor(Color.YELLOW)
+            binding.timerBack.setBackgroundResource(yellow)
             binding.timer.text = getNullTime()
         }
     }
 
     private fun startTimer() {
         if (viewModel.ready) {
-            binding.timerBack.setBackgroundColor(Color.GREEN)
+            binding.timerBack.setBackgroundResource(green)
             viewModel.startTimer()
             changeVisibility(false)
             binding.tapAndHold.text = getString(R.string.timer_running_info)
@@ -90,7 +104,7 @@ class TimerFragment : Fragment() {
     private fun stopTimer() {
         val endTime = viewModel.stopTimer() ?: return
         binding.timer.text = endTime
-        binding.timerBack.setBackgroundColor(Color.WHITE)
+        binding.timerBack.setBackgroundColor(default)
         changeVisibility(true)
         binding.tapAndHold.text = getString(R.string.timer_info)
         binding.scramble.text = viewModel.generateScramble()

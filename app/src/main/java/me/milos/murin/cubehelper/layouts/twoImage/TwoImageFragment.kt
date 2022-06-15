@@ -18,11 +18,6 @@ class TwoImageFragment : Fragment() {
         val binding = DataBindingUtil.inflate<FragmentTwoImageBinding>(
             inflater, R.layout.fragment_two_image, container, false)
 
-        binding.imageNoOne.setImageResource(R.drawable.stopwatch)
-        binding.imageNoTwo.setImageResource(R.drawable.book)
-
-        binding.imageOneText.text = getString(R.string.timer)
-        binding.imageTwoText.text = getString(R.string.learn)
 
         binding.imageNoOne.setOnClickListener { view: View ->
             view.findNavController().navigate(R.id.action_mainTwoImage_to_timer)

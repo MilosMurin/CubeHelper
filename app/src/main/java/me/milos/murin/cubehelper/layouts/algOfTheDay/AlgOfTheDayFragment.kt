@@ -1,6 +1,7 @@
 package me.milos.murin.cubehelper.layouts.algOfTheDay
 
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -8,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import me.milos.murin.cubehelper.R
 import me.milos.murin.cubehelper.databinding.FragmentAlgOfTheDayBinding
+import me.milos.murin.cubehelper.helpers.CubeDrawable
 
 
 class AlgOfTheDayFragment : Fragment() {
@@ -36,6 +38,10 @@ class AlgOfTheDayFragment : Fragment() {
         setHasOptionsMenu(true)
 
         draw(binding)
+
+        val td = TypedValue()
+        binding.root.context.theme.resolveAttribute(R.attr.linePaint, td, false)
+        CubeDrawable.setLinePaint(td.data)
 
 //        For testing
 //        binding.cubeOrientation.setOnClickListener {

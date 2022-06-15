@@ -9,13 +9,14 @@ import java.io.FileNotFoundException
 
 class MainActivity : AppCompatActivity() {
 
-    private val file = File(applicationContext.filesDir, "algorithms")
+    private lateinit var file: File
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         try {
+            file = File(applicationContext.filesDir, "algorithms")
             Algorithms.deserialize(String(Files.toByteArray(file)))
         } catch (_: FileNotFoundException) {
         }

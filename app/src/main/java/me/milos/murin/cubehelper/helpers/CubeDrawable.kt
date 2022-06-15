@@ -2,10 +2,20 @@ package me.milos.murin.cubehelper.helpers
 
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import me.milos.murin.cubehelper.App
+import me.milos.murin.cubehelper.R
 import me.milos.murin.cubehelper.data.LastLayer
 
 class CubeDrawable (private val paints: LastLayer) : Drawable() {
-    private val linePaint: Paint = Paint().apply { setARGB(255, 33, 33, 33) }
+
+    companion object {
+        private var linePaint: Paint = App.getPaint(R.color.cubeLineLight)
+
+        fun setLinePaint(color: Int) {
+            linePaint = App.getPaint(color)
+        }
+    }
+
 
     override fun draw(canvas: Canvas) {
 
@@ -48,7 +58,7 @@ class CubeDrawable (private val paints: LastLayer) : Drawable() {
         }
         // middle edges
         canvas.drawRect(RectF(bounds.left + (42f * x / 10), bounds.top + (2f * x / 10),
-                             bounds.left + (68f * x / 10), bounds.top + (9f * x / 10)), paints.getMV(0))
+                              bounds.left + (68f * x / 10), bounds.top + (9f * x / 10)), paints.getMV(0))
         canvas.drawRect(RectF(bounds.left + (2f * x / 10), bounds.top + (42f * x / 10),
                              bounds.left + (9f * x / 10), bounds.top + (68f * x / 10)), paints.getMH(0))
         canvas.drawRect(RectF(bounds.left + (42f * x / 10), bounds.top + (101f * x / 10),
@@ -104,6 +114,7 @@ class CubeDrawable (private val paints: LastLayer) : Drawable() {
 
     }
 
+    @Deprecated("Deprecated in Java")
     override fun getOpacity(): Int {
         return PixelFormat.OPAQUE
     }

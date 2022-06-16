@@ -71,11 +71,7 @@ class AlgorithmAdapter(private val data: List<Algorithms.Algorithm>):
 
         // Click listener na pridanie/odobratie algoritmu z vyberu
         holder.back.setOnClickListener {
-            if (Algorithms.select(type, id)) {
-                holder.back.setBackgroundResource(green)
-            } else {
-                holder.back.setBackgroundResource(background)
-            }
+            select(holder.back, type, id)
         }
 
         // Focus listener na upravovanie algoritmov uzivatelom
@@ -83,6 +79,14 @@ class AlgorithmAdapter(private val data: List<Algorithms.Algorithm>):
             if (!holder.algAlg.hasFocus()) {
                 Algorithms.edit(position, holder.algAlg.text.toString())
             }
+        }
+    }
+
+    private fun select(layout: ConstraintLayout, type: String, id: Int) {
+        if (Algorithms.select(type, id)) {
+            layout.setBackgroundResource(green)
+        } else {
+            layout.setBackgroundColor(background)
         }
     }
 

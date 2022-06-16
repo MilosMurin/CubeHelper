@@ -11,15 +11,23 @@ import me.milos.murin.cubehelper.R
 import me.milos.murin.cubehelper.databinding.FragmentAlgOfTheDayBinding
 import me.milos.murin.cubehelper.helpers.CubeDrawable
 
-
+/**
+ * Fragment zobrazujuci algoritmus dna
+ */
 class AlgOfTheDayFragment : Fragment() {
 
     private val viewModel: AOTDViewModel by viewModels()
 
+    /**
+     * Vytvori menu
+     */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.aotd_menu, menu)
     }
 
+    /**
+     * Presmeruje uzivatela na vyber algoritmov
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.algSelection -> {
@@ -30,6 +38,9 @@ class AlgOfTheDayFragment : Fragment() {
         }
     }
 
+    /**
+     * Vytvori pohlad na zobrazenie a nastavi potrebne veci
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         val binding =
@@ -37,22 +48,6 @@ class AlgOfTheDayFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        draw(binding)
-
-        val td = TypedValue()
-        binding.root.context.theme.resolveAttribute(R.attr.linePaint, td, false)
-        CubeDrawable.setLinePaint(td.data)
-
-//        For testing
-//        binding.cubeOrientation.setOnClickListener {
-//            viewModel.nextAlg()
-//            draw(binding)
-//        }
-
-        return binding.root
-    }
-
-    private fun draw(binding: FragmentAlgOfTheDayBinding) {
         viewModel.updateAlgorithm()
 
         binding.aotdName.text = viewModel.algName
@@ -61,5 +56,12 @@ class AlgOfTheDayFragment : Fragment() {
         binding.cubeOrientation.rotation = viewModel.rotation
 
         binding.cubeOrientation.setImageDrawable(viewModel.cubeDrawable)
+
+        // ziskanie farby pozadia kocky
+        val td = TypedValue()
+        binding.root.context.theme.resolveAttribute(R.attr.linePaint, td, false)
+        CubeDrawable.setLinePaint(td.data)
+
+        return binding.root
     }
 }

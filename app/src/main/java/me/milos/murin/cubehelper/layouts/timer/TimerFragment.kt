@@ -21,12 +21,16 @@ import me.milos.murin.cubehelper.helpers.Timer.Companion.getNullTime
 import me.milos.murin.cubehelper.helpers.Timer.Companion.getTimeString
 
 
+/**
+ * Fragment zobrazujuci casovac
+ */
 class TimerFragment : Fragment() {
 
     private lateinit var viewModel: TimerViewModel
 
     private lateinit var binding: FragmentTimerBinding
 
+    // Farby
     private var default: Int = 0
     private var green: Int = 0
     private var yellow: Int = 0
@@ -36,6 +40,7 @@ class TimerFragment : Fragment() {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_timer, container, false)
 
+        // Ziska fraby podla temy
         val td = TypedValue()
         binding.root.context.theme.resolveAttribute(android.R.attr.windowBackground, td, true)
         default = td.data
@@ -45,6 +50,7 @@ class TimerFragment : Fragment() {
         yellow = td.data
 
 
+        // nastavi potrebne veci na databazu
         val application = requireNotNull(this.activity).application
 
         val dataSource = SolveDatabase.getInstance(application).solveDatabaseDao
@@ -57,10 +63,10 @@ class TimerFragment : Fragment() {
         binding.scramble.text = viewModel.generateScramble()
         binding.timer.text = getNullTime()
 
-
+        // ziska casy z databazy
         retrieveTimes()
 
-
+        // click listenery na spustanie a stopovanie stopiek
         binding.timerBack.setOnClickListener { stopTimer() }
 
         binding.timerBack.setOnLongClickListener {
@@ -76,7 +82,7 @@ class TimerFragment : Fragment() {
                 return@run view?.onTouchEvent(event) ?: true
             }
         }
-
+        // click listener na prechod na prehlad vsetkych poskladani
         binding.allSolves.setOnClickListener {
             view?.findNavController()?.navigate(R.id.action_timerFragment_to_timerListFragment)
         }
@@ -84,6 +90,9 @@ class TimerFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Pripravi casovac na spustenie
+     */
     private fun readyTimer() {
         if (!viewModel.ready) {
             viewModel.ready = true
@@ -92,6 +101,9 @@ class TimerFragment : Fragment() {
         }
     }
 
+    /**
+     * Spusti casovac
+     */
     private fun startTimer() {
         if (viewModel.ready) {
             binding.timerBack.setBackgroundResource(green)
@@ -101,6 +113,9 @@ class TimerFragment : Fragment() {
         }
     }
 
+    /**
+     * Zastavi casovac
+     */
     private fun stopTimer() {
         val endTime = viewModel.stopTimer() ?: return
         binding.timer.text = endTime
@@ -111,15 +126,20 @@ class TimerFragment : Fragment() {
         retrieveTimes()
     }
 
+    /**
+     * Nastavi viditelnost veci nepotrebnych pocas behu casovaca
+     * ked casovac bezi su nastavene na neviditelne
+     * ked nebezi tak su viditelne
+     */
     private fun changeVisibility(to: Boolean) {
         binding.allSolves.isVisible = to
         binding.pastTimes.isVisible = to
         binding.scramble.isVisible = to
     }
 
-
-    // Used for database access
-
+    /**
+     * Ziska casy z databazy a zobrazi ich na obrazovke
+     */
     private fun retrieveTimes() {
 
         lifecycleScope.launch {

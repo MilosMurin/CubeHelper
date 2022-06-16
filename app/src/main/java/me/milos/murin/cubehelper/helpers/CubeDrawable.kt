@@ -6,9 +6,15 @@ import me.milos.murin.cubehelper.App
 import me.milos.murin.cubehelper.R
 import me.milos.murin.cubehelper.data.LastLayer
 
+/**
+ * Trieda, ktora vytvori kocku na nakreslenie
+ */
 class CubeDrawable (private val paints: LastLayer) : Drawable() {
 
     companion object {
+        /**
+         * Zakladna farba pozadia kocky
+         */
         private var linePaint: Paint = App.getPaint(R.color.cubeLineLight)
 
         fun setLinePaint(color: Int) {
@@ -16,7 +22,9 @@ class CubeDrawable (private val paints: LastLayer) : Drawable() {
         }
     }
 
-
+    /**
+     * Nakresli kocku na [canvas]
+     */
     override fun draw(canvas: Canvas) {
 
         val x = bounds.width() / 11
@@ -42,7 +50,7 @@ class CubeDrawable (private val paints: LastLayer) : Drawable() {
 
         for (i in 1..4) {
             canvas.drawPath(cornersBack, linePaint)
-            canvas.drawPath(cornersFront, paints.getCi(i - 1))
+            canvas.drawPath(cornersFront, paints.getCornerI(i - 1))
 
             rotate90(cornersBack, 5.5 * x, 5.5 * x)
             rotate90(cornersFront, 5.5 * x, 5.5 * x)
@@ -52,40 +60,53 @@ class CubeDrawable (private val paints: LastLayer) : Drawable() {
         transformX(cornersFront, 6 * x)
 
         for (i in 1..4) {
-            canvas.drawPath(cornersFront, paints.getCiP2(i - 1))
+            canvas.drawPath(cornersFront, paints.getCornerIPlusTwo(i - 1))
 
             rotate90(cornersFront, 5.5 * x, 5.5 * x)
         }
         // middle edges
         canvas.drawRect(RectF(bounds.left + (42f * x / 10), bounds.top + (2f * x / 10),
-                              bounds.left + (68f * x / 10), bounds.top + (9f * x / 10)), paints.getMV(0))
+                              bounds.left + (68f * x / 10), bounds.top + (9f * x / 10)), paints.getMidVertical(0))
         canvas.drawRect(RectF(bounds.left + (2f * x / 10), bounds.top + (42f * x / 10),
-                             bounds.left + (9f * x / 10), bounds.top + (68f * x / 10)), paints.getMH(0))
+                             bounds.left + (9f * x / 10), bounds.top + (68f * x / 10)), paints.getMidHorizontal(0))
         canvas.drawRect(RectF(bounds.left + (42f * x / 10), bounds.top + (101f * x / 10),
-                             bounds.left + (68f * x / 10), bounds.top + (108f * x / 10)), paints.getMV(1))
+                             bounds.left + (68f * x / 10), bounds.top + (108f * x / 10)), paints.getMidVertical(1))
         canvas.drawRect(RectF(bounds.left + (101f * x / 10), bounds.top + (42f * x / 10),
-                             bounds.left + (108f * x / 10), bounds.top + (68f * x / 10)), paints.getMH(1))
+                             bounds.left + (108f * x / 10), bounds.top + (68f * x / 10)), paints.getMidHorizontal(1))
     }
 
+    /**
+     * Posunie danu vektorovu cestu na x suradnici o [x]
+     */
     private fun transformX(path: Path, x: Int) {
         val matrix = Matrix()
         matrix.postTranslate(x.toFloat(), 0f)
         path.transform(matrix)
     }
 
+    /**
+     * Otoci danu vektorovu cestu o 90 stupnov okolo bodu[[px],[py]]
+     */
     private fun rotate90(path: Path, px: Double, py: Double) {
         val matrix = Matrix()
         matrix.setRotate(90f, px.toFloat(), py.toFloat())
         path.transform(matrix)
     }
 
+    /**
+     * Otoci danu vektorovu cestu zrkadlovo
+     */
     private fun scale(path: Path, x: Int) {
         val matrix = Matrix()
         matrix.setScale(-1f, 1f, 2.5f * x, 0.5f * x)
         path.transform(matrix)
     }
 
-
+    /**
+     * Vyvori vektorovu cestu pre pozadie okrajov kocky
+     *
+     * @param x jednotka pomocou ktorej urcujem velkost
+     */
     private fun getCornersBackPath(x: Int): Path {
         val cornersBack = Path()
         cornersBack.moveTo((14 * x / 10).toFloat(), 0F)
@@ -96,6 +117,12 @@ class CubeDrawable (private val paints: LastLayer) : Drawable() {
         return cornersBack
     }
 
+    /**
+     * Vyvori vektorovu cestu pre lavy rohove policko
+     * toto policko neskor otacam a presuvam aby som nakreslil vsetky ostatne rohy
+     *
+     * @param x jednotka pomocou ktorej urcujem velkost
+     */
     private fun getCornersFrontPath(x: Int): Path {
         val cornersFront = Path()
         cornersFront.moveTo((16 * x / 10).toFloat(), (2 * x / 10).toFloat())
@@ -107,11 +134,11 @@ class CubeDrawable (private val paints: LastLayer) : Drawable() {
     }
 
     override fun setAlpha(alpha: Int) {
-
+        linePaint.alpha = alpha
     }
 
     override fun setColorFilter(colorFilter: ColorFilter?) {
-
+        linePaint.colorFilter = colorFilter
     }
 
     @Deprecated("Deprecated in Java")

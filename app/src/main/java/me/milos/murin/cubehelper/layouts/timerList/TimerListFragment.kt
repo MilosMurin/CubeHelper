@@ -14,7 +14,9 @@ import me.milos.murin.cubehelper.database.Solve
 import me.milos.murin.cubehelper.database.SolveDatabase
 import me.milos.murin.cubehelper.database.SolveDatabaseDao
 
-
+/**
+ * Fragment zobrazujuci zoznam poskladani pomocou recycler view
+ */
 class TimerListFragment : Fragment() {
 
     private lateinit var dataSource: SolveDatabaseDao
@@ -23,6 +25,9 @@ class TimerListFragment : Fragment() {
 
     private lateinit var data: List<Solve>
 
+    /**
+     * Ziska databazu a data z nej
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,6 +39,9 @@ class TimerListFragment : Fragment() {
 
     }
 
+    /**
+     * Vytvori pohlad :)
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_timer_list, container, false)
 
@@ -49,6 +57,9 @@ class TimerListFragment : Fragment() {
         return view
     }
 
+    /**
+     * Ziska zoznam poskladani z databzy
+     */
     private fun getSolves() {
         lifecycleScope.launch {
             data = dataSource.getSorted()
@@ -63,6 +74,9 @@ class TimerListFragment : Fragment() {
         }
     }
 
+    /**
+     * Vymaze zaznam v databaze
+     */
     fun removeSolve(solve: Solve, adapter: SolveTimeAdapter) {
         lifecycleScope.launch {
             dataSource.delete(solve)

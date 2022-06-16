@@ -10,7 +10,9 @@ import androidx.navigation.findNavController
 import me.milos.murin.cubehelper.R
 import me.milos.murin.cubehelper.databinding.FragmentTwoImageBinding
 
-
+/**
+ * Fragment zobrazujuci hlavne menu
+ */
 class TwoImageFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

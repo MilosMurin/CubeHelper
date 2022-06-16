@@ -12,12 +12,19 @@ import me.milos.murin.cubehelper.R
 import me.milos.murin.cubehelper.data.Algorithms
 import me.milos.murin.cubehelper.helpers.CubeDrawable
 
+/**
+ * Trieda vyuzivana na adaptovanie dat z recycler view
+ */
 class AlgorithmAdapter(private val data: List<Algorithms.Algorithm>):
     RecyclerView.Adapter<AlgorithmAdapter.ViewHolder>() {
 
+    // Farby na zafarbovanie pozadia algoritmov podla vyberu
     private var background: Int = 0
     private var green: Int = 0
 
+    /**
+     * Trieda obshujuca pohlady pre jednotlive algoritmy
+     */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val algName: TextView = view.findViewById(R.id.algListName)
         val algAlg: TextView = view.findViewById(R.id.algListAlg)
@@ -25,9 +32,14 @@ class AlgorithmAdapter(private val data: List<Algorithms.Algorithm>):
         val back: ConstraintLayout = view.findViewById(R.id.algListItemBack)
     }
 
+    /**
+     * Vytvori viewHolder
+     */
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
+        // Vytvori pohlad z alg_list_itemu
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.alg_list_item, viewGroup, false)
+        // nacita farby podla temy
         val td = TypedValue()
         view.context.theme.resolveAttribute(android.R.attr.windowBackground, td, true)
         background = td.data
@@ -37,6 +49,9 @@ class AlgorithmAdapter(private val data: List<Algorithms.Algorithm>):
         return ViewHolder(view)
     }
 
+    /**
+     * Nastavi hodnoty v layoute
+     */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val alg = data[position]
@@ -47,16 +62,23 @@ class AlgorithmAdapter(private val data: List<Algorithms.Algorithm>):
         holder.algAlg.text = Algorithms.getEdited() ?: alg.alg
         holder.cube.setImageDrawable(CubeDrawable(alg.layer))
 
+        // Nastavi farbu pozadia podla toho ci je algoritmus vo vybere alebo nie
         if (Algorithms.isInSelection(type, id)) {
             holder.back.setBackgroundResource(green)
         } else {
-            holder.back.setBackgroundColor(background)
+            holder.back.setBackgroundResource(background)
         }
 
+        // Click listener na pridanie/odobratie algoritmu z vyberu
         holder.back.setOnClickListener {
-            select(holder.back, type, id)
+            if (Algorithms.select(type, id)) {
+                holder.back.setBackgroundResource(green)
+            } else {
+                holder.back.setBackgroundResource(background)
+            }
         }
 
+        // Focus listener na upravovanie algoritmov uzivatelom
         holder.algAlg.setOnFocusChangeListener { _: View, _: Boolean ->
             if (!holder.algAlg.hasFocus()) {
                 Algorithms.edit(position, holder.algAlg.text.toString())
@@ -64,15 +86,10 @@ class AlgorithmAdapter(private val data: List<Algorithms.Algorithm>):
         }
     }
 
-    private fun select(layout: ConstraintLayout, type: String, id: Int) {
-        if (Algorithms.select(type, id)) {
-            layout.setBackgroundResource(green)
-        } else {
-            layout.setBackgroundColor(background)
-        }
-    }
+    /**
+     * Vrati pocet algoritmov v zozname
+     * Potrebne pre recycler view
+     */
+    override fun getItemCount() = data.size
 
-    override fun getItemCount(): Int {
-        return data.size
-    }
 }

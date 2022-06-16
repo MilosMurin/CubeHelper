@@ -12,9 +12,15 @@ import me.milos.murin.cubehelper.helpers.Timer
 import java.text.DateFormat
 import java.util.*
 
+/**
+ * Trieda vyuzivana na adaptovanie dat z recycler view
+ */
 class SolveTimeAdapter(private var data: List<Solve>, private val fragment: TimerListFragment):
     RecyclerView.Adapter<SolveTimeAdapter.ViewHolder>(){
 
+    /**
+     * Trieda obshujuca pohlady pre jednotlive poskladania
+     */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val solveId: TextView = view.findViewById(R.id.timeListId)
         val solvePos: TextView = view.findViewById(R.id.timeListPosition)
@@ -24,6 +30,9 @@ class SolveTimeAdapter(private var data: List<Solve>, private val fragment: Time
         val remove: ImageView = view.findViewById(R.id.timeListRemove)
     }
 
+    /**
+     * Vytvori viewHolder
+     */
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.time_list_item, viewGroup, false)
@@ -31,6 +40,9 @@ class SolveTimeAdapter(private var data: List<Solve>, private val fragment: Time
         return ViewHolder(view)
     }
 
+    /**
+     * Nastavi hodnoty v layoute
+     */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val solve = data[position]
 
@@ -42,17 +54,20 @@ class SolveTimeAdapter(private var data: List<Solve>, private val fragment: Time
         holder.solveTime.text = Timer.getTimeString(solve.solveTime)
 
         holder.remove.setOnClickListener {
-            removeSolve(solve, position)
+            fragment.removeSolve(solve, this)
+            notifyItemRemoved(position)
         }
     }
 
-    private fun removeSolve(solve: Solve, position: Int) {
-        fragment.removeSolve(solve, this)
-        notifyItemRemoved(position)
-    }
-
+    /**
+     * Vrati pocet algoritmov v zozname
+     * Potrebne pre recycler view
+     */
     override fun getItemCount() = data.size
 
+    /**
+     * Updatne novy zoznam dat
+     */
     fun update(list: List<Solve>) {
         data = list
     }

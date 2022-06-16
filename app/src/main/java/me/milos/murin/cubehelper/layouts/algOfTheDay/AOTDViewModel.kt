@@ -4,6 +4,14 @@ import androidx.lifecycle.ViewModel
 import me.milos.murin.cubehelper.data.Algorithms
 import me.milos.murin.cubehelper.helpers.CubeDrawable
 
+/**
+ * View model obsahujuci data o algoritme dna
+ * @property alg algortimus dna
+ * @property _algText kroky algoritmu v retazci
+ * @property _algName nazov algoritmu
+ * @property _rotation kolkokrat treba kocku otocit o 90 stupnov
+ * @property _cubeDrawable kocka na zobrazenie
+ */
 class AOTDViewModel : ViewModel() {
 
     private lateinit var alg: Algorithms.Algorithm
@@ -25,16 +33,15 @@ class AOTDViewModel : ViewModel() {
         get() = _cubeDrawable
 
     init {
-        setRandomAlg()
-    }
-
-    private fun setRandomAlg() {
+        // Nastavi algoritmus na vybraty algoritmus
         Algorithms.selectRandomAlg()
 
         updateAlgorithm()
     }
 
-
+    /**
+     * Updatne informacie o algoritme
+     */
     fun updateAlgorithm() {
         alg = Algorithms.getAlg()!!
 

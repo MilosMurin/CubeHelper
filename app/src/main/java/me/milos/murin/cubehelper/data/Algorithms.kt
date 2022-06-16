@@ -5,24 +5,48 @@ import me.milos.murin.cubehelper.R
 import java.util.*
 import kotlin.random.Random
 
-
+/**
+ * Trieda uchovavajuca informacie o algoritmoch
+ */
 class Algorithms {
 
+    /**
+     * Datova trieda pre algoritmus
+     *
+     * @property type pod typ algoritmu
+     * @property alg retazec obsahujuci kroky algoritmu
+     * @property layer parameter obsahujuci informacie pre nakreslenie pociatocneho stavu algoritmu
+     */
     data class Algorithm(val type: String, val alg: String, val layer: LastLayer)
 
 
     companion object {
 
-        private val defaultSelection = 1..77
+        /**
+         * Vyber algoritmov, z ktorych sa vyber algoritmus dan
+         */
+        private var selection: ArrayList<Int> = ArrayList((1..77).toList())
 
-        private var selection: ArrayList<Int> = ArrayList(defaultSelection.toList())
-
+        /**
+         * Vybrany algoritmus dna
+         */
         private var selected: Int = selection.random(Random(System.currentTimeMillis()))
 
+        /**
+         * Cas kedy sa ma najskor zmenit algoritmus dna
+         */
         private var nextSelection: Calendar = calculateNextSelection()
 
+        /**
+         * Mapa obsahujuca upravene algoritmy
+         */
         private var edited: HashMap<Int, String> = hashMapOf()
 
+        /**
+         * Metoda, ktora zmeni obsah tejto triedy do retazca
+         *
+         * @return retazec na ulozenie
+         */
         fun serialize(): String {
             val sb = java.lang.StringBuilder()
             sb.append(selected).append("|")
@@ -41,29 +65,34 @@ class Algorithms {
             return sb.toString()
         }
 
+        /**
+         * Metoda, ktora nacita informacie z daneho retazca
+         *
+         * @param s retazec nacitany zo suboru
+         */
         fun deserialize(s: String) {
-            for ((j, l) in s.split("|").withIndex()) {
-                when (j) {
-                    0 -> selected = l.toInt()
+            for ((i, lines) in s.split("|").withIndex()) {
+                when (i) {
+                    0 -> selected = lines.toInt()
                     1 -> {
                         nextSelection = Calendar.getInstance()
-                        nextSelection.timeInMillis = l.toLong()
+                        nextSelection.timeInMillis = lines.toLong()
                     }
                     2 -> {
-                        if (l != "") {
+                        if (lines != "") {
                             selection.clear()
-                            for (k in l.split(",")) {
-                                if (k != "")
-                                    selection.add(k.toInt())
+                            for (oneFromSelection in lines.split(",")) {
+                                if (oneFromSelection != "")
+                                    selection.add(oneFromSelection.toInt())
                             }
                         }
                     }
                     3 -> {
-                        if (l != "") {
-                            for (k in l.split(",")) {
-                                if (k != "") {
-                                    val g = k.split(":")
-                                    edited[g[0].toInt()] = g[1]
+                        if (lines != "") {
+                            for (pair in lines.split(",")) {
+                                if (pair != "") {
+                                    val keyValue = pair.split(":")
+                                    edited[keyValue[0].toInt()] = keyValue[1]
                                 }
                             }
                         }
@@ -72,6 +101,12 @@ class Algorithms {
             }
         }
 
+        /**
+         * Zmeni kroky algoritmu s danym id
+         *
+         * @param id id algoritmu
+         * @param alg novy algoritmus
+         */
         fun edit(id: Int, alg: String) {
             if (getAlg(id)?.alg != alg) {
                 edited[id] = alg
@@ -82,12 +117,20 @@ class Algorithms {
             }
         }
 
+        /**
+         * Vrati kroky algoritmu ak bol algoritmus zmeneny uzivatelom
+         *
+         * @return upravene kroky alebo null ak algoritmus nebol upravovany
+         */
         fun getEdited(): String? {
             return if (edited.containsKey(selected)) {
                 edited[selected]
             } else null
         }
 
+        /**
+         * Vrati cas kedy najskor sa ma zmenit denny algoritmus
+         */
         private fun calculateNextSelection(): Calendar {
             val c: Calendar = Calendar.getInstance()
             c.add(Calendar.DAY_OF_MONTH, 1)
@@ -98,6 +141,9 @@ class Algorithms {
             return c
         }
 
+        /**
+         * Prida alebo odoberie algoritmus z vyber algoritmov na algoritmus dna
+         */
         fun select(type: String, id: Int): Boolean {
             val nId = getId(type, id)
             return if (selection.contains(nId)) {
@@ -109,10 +155,16 @@ class Algorithms {
             }
         }
 
+        /**
+         * Pomocna metoda na zistenie ci dany algoritmus je vo vybere [selection] algoritmov
+         */
         fun isInSelection(type: String, id: Int): Boolean {
             return selection.contains(getId(type, id))
         }
 
+        /**
+         * Vyberie nahodny algoritmus dna z vyberu [selection] a nastavi novy cas na novy vyber
+         */
         fun selectRandomAlg() {
             if (System.currentTimeMillis() > nextSelection.timeInMillis) {
                 selected = selection.random(Random(System.currentTimeMillis()))
@@ -121,12 +173,15 @@ class Algorithms {
         }
 
         /**
-         * Gets the algorithm with the type and relative id given
+         * Vrati info o vybranom algoritme
          */
         fun getAlg(): Algorithm? {
             return getAlg(selected)
         }
 
+        /**
+         * Vrati info o algoritme s danym id
+         */
         private fun getAlg(id: Int): Algorithm? {
             val nId = getId(id)
             return when (getType(id)) {
@@ -137,27 +192,41 @@ class Algorithms {
             }
         }
 
+        /**
+         * Vytvori nazov prave vybranemu algoritmu
+         * Tento nazov moze byt aj dlhsi ako v metode [algListName]
+         *
+         * @return nazov algoritmu
+         */
         fun algName(): String {
             val id = getId()
             return when (getType()) {
-                "oll" -> App.get(R.string.oll, id)
-                "coll" -> App.get(R.string.coll, coll[id]!!.type)
-                "wv" -> App.get(R.string.winter_variation, wv[id]!!.type)
-                else -> App.get(R.string.permutationShort, pll[id]!!.type)
-            }
-        }
-
-        fun algListName(type: String, id: Int): String {
-            return when (type) {
-                "oll" -> App.get(R.string.oll, id)
-                "coll" -> App.get(R.string.coll, coll[id]!!.type)
-                "wv" -> App.get(R.string.wv, wv[id]!!.type)
-                else -> App.get(R.string.pll, pll[id]!!.type)
+                "oll" -> App.getStringResource(R.string.oll, id)
+                "coll" -> App.getStringResource(R.string.coll, coll[id]!!.type)
+                "wv" -> App.getStringResource(R.string.winter_variation, wv[id]!!.type)
+                else -> App.getStringResource(R.string.permutationShort, pll[id]!!.type)
             }
         }
 
         /**
-         * Get id in specific hashmap from all algs id/position in all algs list
+         * Vytvori nazov algoritmu s danym typom a id
+         * Vytvara nazvy so skratkami
+         *
+         * @param type typ algoritmu (oll,pll,coll,vw)
+         * @param id id algoritmu v skupine algoritmov s danym typom
+         * @return Skrateny nazvo algoritmu
+         */
+        fun algListName(type: String, id: Int): String {
+            return when (type) {
+                "oll" -> App.getStringResource(R.string.oll, id)
+                "coll" -> App.getStringResource(R.string.coll, coll[id]!!.type)
+                "wv" -> App.getStringResource(R.string.wv, wv[id]!!.type)
+                else -> App.getStringResource(R.string.pll, pll[id]!!.type)
+            }
+        }
+
+        /**
+         * Vrati id algoritmu pre list vsetkych algoritmov z konkretneho typu a id algoritmu
          */
         private fun getId(type: String, id: Int): Int {
             return when (type) {
@@ -168,12 +237,15 @@ class Algorithms {
             }
         }
 
+        /**
+         * Vrati typ prave vybraneho algoritmu
+         */
         private fun getType(): String {
             return getType(selected)
         }
 
         /**
-         * Get type from all algs id/position in all algs list
+         * Vrati typ algoritmu na zaklade id spomedzi vsetkych algoritmov
          */
         fun getType(id: Int): String {
             return when (id) {
@@ -192,12 +264,15 @@ class Algorithms {
             }
         }
 
+        /**
+         * Vrati id pre svoj typ prave vybraneho algoritmu
+         */
         private fun getId(): Int {
             return getId(selected)
         }
 
         /**
-         * Get id from all algs id
+         * Vrati id pre svoj typ z id pre vsetky algoritmy
          */
         fun getId(id: Int): Int {
             return when (id) {
@@ -216,6 +291,9 @@ class Algorithms {
             }
         }
 
+        /**
+         * Vrati zoznam vsetkych algoritmov
+         */
         fun getAllAlgs(): List<Algorithm> {
             val list = mutableListOf<Algorithm>()
             list.addAll(pll.values)
@@ -225,7 +303,9 @@ class Algorithms {
             return list.toList()
         }
 
-        // permute last layer
+        /**
+         * Mapa obsahujuca vsetky algoritmy typu pll (permutate last layer)
+         */
         private val pll: HashMap<Int, Algorithm> =
             hashMapOf(1 to Algorithm("Aa", "l' U R' D2 R U' R' D2 R2", makePll(1, 5, 1, 6, 1, 2, 5, 6, 6, 2, 2, 5)),
                       2 to Algorithm("Ab", "x R2 D2 R U R' D2 R U' R x'", makePll(6, 5, 2, 5, 1, 5, 1, 6, 6, 2, 2, 1)),
@@ -250,6 +330,9 @@ class Algorithms {
                       21 to Algorithm("Z", "M' U' M2 U' M2 U' M' U2 M2", makePll(6, 1, 6, 2, 5, 2, 5, 2, 5, 1, 6, 1))
             )
 
+        /**
+         * Pomocna metoda na vytvorenie pociatocneho stavu algoritmu pre typ pll
+         */
         private fun makePll(vararg indexes: Int): LastLayer {
 
             val list = mutableListOf(4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -264,7 +347,9 @@ class Algorithms {
 
         }
 
-        // orientate last layer
+        /**
+         * Mapa obsahujuca vsetky algoritmy typu oll (orientate last layer)
+         */
         private val oll: HashMap<Int, Algorithm> =
             hashMapOf(1 to Algorithm("Dot", "R U2 R2 F R F' U2 R' F R F'", makeOll(4, 10, 12, 13, 14, 16, 18, 19, 20)),
                       2 to Algorithm("Dot", "F R U R' U' F' f R U R' U' f'", makeOll(4, 10, 11, 13, 15, 16, 18, 19, 20)),
@@ -325,6 +410,9 @@ class Algorithms {
                       57 to Algorithm("Corners oriented", "R U R' U' M' U R U' r'", makeOll(0, 2, 3, 4, 5, 6, 8, 10, 16))
             )
 
+        /**
+         * Pomocna metoda na vytvorenie pociatocneho stavu algoritmu pre typ oll
+         */
         private fun makeOll(vararg indexes: Int): LastLayer {
 
             val list = mutableListOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -336,21 +424,27 @@ class Algorithms {
             return LastLayer(list)
         }
 
-        // corners of last layer
+        /**
+         * Pomocna mapa obsahujuca umiestnenie zltych dielikov v pociatocnom stave algoritmu podla pod typu coll
+         */
         private val collYellows: HashMap<Char, IntArray> =
             hashMapOf('H' to intArrayOf(12, 14, 18, 20),
                       'L' to intArrayOf(2, 6, 15, 20),
                       'P' to intArrayOf(11, 15, 18, 20),
                       'T' to intArrayOf(6, 8, 12, 20),
                       'U' to intArrayOf(6, 8, 9, 11))
-
+        /**
+         * Pomocna mapa obsahujuca cisla dielikov na zafarbenie v pociatocnom stave algoritmu podla pod typu coll
+         */
         private val collFills: HashMap<Char, IntArray> =
             hashMapOf('H' to intArrayOf(0, 2, 6, 8, 9, 11, 15, 17),
                       'L' to intArrayOf(0, 8, 9, 11, 12, 14, 17, 18),
                       'P' to intArrayOf(0, 2, 6, 8, 9, 12, 14, 17),
                       'T' to intArrayOf(0, 2, 9, 11, 14, 15, 17, 18),
                       'U' to intArrayOf(0, 2, 12, 14, 15, 17, 18, 20))
-
+        /**
+         * Mapa obsahujuca vsetky algoritmy typu coll (corners of last layer)
+         */
         private val coll: HashMap<Int, Algorithm> =
             hashMapOf(1 to Algorithm("H1", "R U R' U R U' R' U R U2 R'", makeCOll('H', 5, 5, 6, 6, 2, 1, 1, 2)),
                       2 to Algorithm("H2", "F R U' R' U R U2 R' U' R U R' U' F'", makeCOll('H', 2, 1, 5, 5, 6, 6, 2, 1)),
@@ -380,7 +474,9 @@ class Algorithms {
                       26 to Algorithm("U4", "F R U' R' U R U R' U R U' R' F'", makeCOll('U', 1, 2, 6, 5, 1, 2, 5, 6)),
                       27 to Algorithm("U5", "R2 D' R U2 R' D R U2 R", makeCOll('U', 1, 5, 2, 5, 1, 6, 2, 6)),
                       28 to Algorithm("U6", "R2 D' R U R' D R U R U' R' U' R", makeCOll('U', 6, 6, 1, 5, 1, 2, 5, 2)))
-
+        /**
+         * Pomocna metoda na vytvorenie pociatocneho stavu algoritmu pre typ coll
+         */
         private fun makeCOll(type: Char, vararg indexes: Int): LastLayer {
 
             val list = mutableListOf(0, 4, 0, 4, 4, 4, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -396,7 +492,9 @@ class Algorithms {
             return LastLayer(list)
         }
 
-        // winter variation
+        /**
+         * Mapa obsahujuca vsetky algoritmy typu wv (winter variation)
+         */
         private val wv: HashMap<Int, Algorithm> =
             hashMapOf(1 to Algorithm("Oriented", "L' U2 R U R' U2 L", makeWV(0, 2, 8)),
                       2 to Algorithm("Rectangle", "U' R' F R U R U' R' F'", makeWV(0, 2, 14)),
@@ -426,6 +524,9 @@ class Algorithms {
                       26 to Algorithm("Sune", "R U R' U' R U R' U' R U' R'", makeWV(11, 14, 20)),
                       27 to Algorithm("Sune", "R U' R' U' R U R' U R U2 R'", makeWV(9, 12, 15)))
 
+        /**
+         * Pomocna metoda na vytvorenie pociatocneho stavu algoritmu pre typ wv
+         */
         private fun makeWV(vararg indexes: Int): LastLayer {
             val list = mutableListOf(0, 4, 0, 4, 4, 4, 6, 6, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 3, 0, 0)
 

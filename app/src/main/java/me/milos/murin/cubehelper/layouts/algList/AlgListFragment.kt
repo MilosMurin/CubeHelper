@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import me.milos.murin.cubehelper.R
 import me.milos.murin.cubehelper.data.Algorithms
 
-
+/**
+ * Fragment zobrazujuci vyber algoritmov v recycler view
+ */
 class AlgListFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

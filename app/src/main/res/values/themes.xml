@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.CubeHelper" parent="Theme.AppCompat.DayNight.DarkActionBar">
 
-        <item name="colorPrimary">@color/primary</item> <!-- Action bar with the name -->
-        <item name="colorPrimaryDark">@color/primaryDark</item> <!-- Status bar of android -->
+        <item name="colorPrimary">@color/primaryLight</item> <!-- Action bar with the name -->
+        <item name="colorPrimaryDark">@color/primaryLightDark</item> <!-- Status bar of android -->
 
         <item name="colorSecondary">@color/black</item> <!-- Accent color -->
         <item name="colorSecondaryVariant">@color/black</item>

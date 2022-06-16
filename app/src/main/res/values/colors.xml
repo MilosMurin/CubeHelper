@@ -11,9 +11,10 @@
     <color name="greenDark">#FF009900</color>
     <color name="yellowDark">#FF999900</color>
 
-    <color name="primary">#FF4C638F</color>
-    <color name="primaryDark">#FF3B527E</color>
-    <color name="primaryDarker">#FF2A416D</color>
+    <color name="primaryLight">#FF4C638F</color>
+    <color name="primaryLightDark">#FF3B527E</color>
+    <color name="primaryDark">#FF2A416D</color>
+    <color name="primaryDarkDark">#FF19305C</color>
 
     <color name="transparent">#00000000</color>
 
